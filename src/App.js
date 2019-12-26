@@ -53,12 +53,12 @@ export default class App extends Component {
 
     addSymbol = (e) => {
         if (e === '=') {
-            console.log(this.state.string + this.state.toShow,this.calc(this.state.string + this.state.toShow));
             this.setState(({toShow, string}) => {
                 return {
-                    toShow: '0',
-                    string: this.calc(string + toShow),
-                }
+                    //toShow: '0',
+                    string: toShow==='0'?this.calc(string) : this.calc((string + toShow).replace('  ', ' ')),
+                };
+
             });
         } else if (e === 'ac') {
             this.setState(() => {
