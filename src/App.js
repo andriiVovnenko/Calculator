@@ -2,20 +2,18 @@ import React, {Component} from 'react';
 import Display from "./display";
 import Buttons from "./buttons";
 
-export default class App extends Component{
+export default class App extends Component {
 
     state = {
         toShow: '0',
         string: '0',
-        isMinus: false,
         lastActive: '',
-        isnull: false,
         nextMayMinus: true,
     };
 
     calc = (string) => {
         let str = string.split(' ');
-        for(let i = 0; i < str.length; i++){
+        for (let i = 0; i < str.length; i++) {
             if (str[i] === '/' || str[i] === '*') {
                 if (str[i] === '/') {
                     let tmp = +str[i - 1] / +str[i + 1];
@@ -32,15 +30,15 @@ export default class App extends Component{
                 }
             }
         }
-        for(let i = 0; i < str.length; i++){
-            if(str[i] === '+' || str[i] === '-'){
-                if(str[i] === '+'){
+        for (let i = 0; i < str.length; i++) {
+            if (str[i] === '+' || str[i] === '-') {
+                if (str[i] === '+') {
                     let tmp = +str[i - 1] + +str[i + 1];
                     str[i] = str[i].replace('+', tmp);
                     str.splice(i - 1, 1);
                     str.splice(i, 1);
                     i--;
-                }else {
+                } else {
                     let tmp = +str[i - 1] - +str[i + 1];
                     str[i] = str[i].replace('-', tmp);
                     str.splice(i - 1, 1);
@@ -53,69 +51,72 @@ export default class App extends Component{
     };
 
 
-
     addSymbol = (e) => {
-        if(e === '='){
-            this.setState(({toShow, string})=>{
+        if (e === '=') {
+            console.log(this.state.string + this.state.toShow,this.calc(this.state.string + this.state.toShow));
+            this.setState(({toShow, string}) => {
                 return {
                     toShow: '0',
                     string: this.calc(string + toShow),
                 }
             });
-        } else if(e === 'ac'){
-            this.setState(()=>{
+        } else if (e === 'ac') {
+            this.setState(() => {
                 return {
                     toShow: '0',
                     string: '0',
+                    lastActive: '',
+                    nextMayMinus: true,
                 }
             });
-        } else if(/[\d]/g.test(e)){
-            this.setState({
-                toShow: this.state.toShow==='0' || /[*/+]/.test(this.state.toShow[0])? e : this.state.toShow+e,
-                nextMayMinus: false,
-                lastActive: '',
-            })
-        } else if (e === '.'){
-            if(this.state.toShow.includes('.')){
+        } else if (e === '.') {
+            if (this.state.toShow.includes('.')) {
                 return;
             }
-            this.setState(({toShow})=>{
+            this.setState(({toShow}) => {
                 return {
                     toShow: toShow + e,
                 }
             })
-        }else if (/[+-/*]/.test(e) /*&& !/[*+-/]$/.test(this.state.string)*/){
-            if(e === '-'  && (/*this.state.string==='0' || */this.state.nextMayMinus)){
+        } else if (/[\d]/g.test(e)) {
+            this.setState({
+                toShow: this.state.toShow === '0' || /[*/+]/.test(this.state.toShow[0]) ? e : this.state.toShow + e,
+                nextMayMinus: false,
+                lastActive: '',
+            })
+        } else if (/[+-/*]/.test(e) /*&& !/[*+-/]$/.test(this.state.string)*/) {
+            if (e === '-' && (this.state.nextMayMinus)) {
                 this.setState({
-                    string: this.state.string==='0'? '' : this.state.string,
+                    string: this.state.string === '0' ? '' : this.state.string,
                     toShow: '-',
                     nextMayMinus: false,
-                })
+                });
             } else {
-                if (/[/*-+]/.test(this.state.lastActive)){
-                    const idx = this.state.toShow.lastIndexOf(e);
+                if (/[/*+-]/.test(this.state.lastActive)){
+                    const idx = this.state.string.lastIndexOf(this.state.lastActive);
                     const rep = [...this.state.string.split('')];
                     rep[idx] = e;
                     this.setState({
-                        toShow: e,
+                        toShow: '0',
+                        string: rep.join(''),
+                        lastActive: e,
+                        nextMayMinus: true,
                     });
                     return;
                 }
                 this.setState({
                     toShow: '0',
-                    string: this.state.string==='0'? this.state.toShow + ' ' + e + ' ' : this.state.string + ' '+ this.state.toShow + ' ' + e + ' ',
+                    string: this.state.string === '0' ? this.state.toShow + ' ' + e + ' ' : this.state.string + ' ' + this.state.toShow + ' ' + e + ' ',
                     nextMayMinus: true,
                     lastActive: e,
                 })
             }
         }
-
     };
 
     render() {
-        return(
+        return (
             <div>
-                <h1>HELLO</h1>
                 <Display toShow={this.state.toShow} string={this.state.string}/>
                 <Buttons addSymbol={this.addSymbol}/>
             </div>

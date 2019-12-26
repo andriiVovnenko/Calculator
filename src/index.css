@@ -4,7 +4,13 @@
     margin: 0 auto;
     border: 5px solid black;
 }
+
+.container_buttons {
+    background-color: cornflowerblue;
+}
+
 button{
+    border-radius: 10%;
     width: 100px;
     height: 50px;
     margin: 3px;
@@ -18,14 +24,16 @@ button:hover{
 }
 
 .display-one {
+    height: 50px;
     background-color: black;
     color: white;
-    font-size: 22px;
+    font-size: 30px;
 }
 
 .display-two {
+    height: 50px;
     background-color: antiquewhite;
     color: black;
-    font-size: 22px;
+    font-size: 30px;
 }
 

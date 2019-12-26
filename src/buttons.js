@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-
+import './index.css';
 export default class Buttons extends Component{
 
     buttons = [
@@ -26,11 +26,12 @@ export default class Buttons extends Component{
         this.props.addSymbol(e.target.value);
     };
 
+
     render() {
         return(
-               <div onClick={this.onButtonClick}>
+               <div onClick={this.onButtonClick} className='container_buttons'>
                    {this.buttons.map((el, idx) => {
-                       return <button key={idx} name={el.name} value={el.value}>{el.label}</button>
+                       return <button key={idx} id={el.name} name={el.name} value={el.value}>{el.label}</button>
                    })}
                </div>
         )
